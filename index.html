@@ -43,7 +43,7 @@ footer{border-top:1px solid var(--line);margin-top:34px;padding-top:16px;font-si
 <ul>
 <li><strong>الأسئلة والمحادثة:</strong> عند إرسال سؤال إلى المساعد الذكي، تتم معالجة نص السؤال، وقد يُرسل جزء من سياق المحادثة السابق اللازم لفهم السؤال والرد عليه.</li>
 <li><strong>البيانات المحلية:</strong> قد تُحفظ تفضيلات أو أوراق يختار المستخدم حفظها، وبلاغات الإجابات، في مساحة تخزين التطبيق على الجهاز وفق ميزات النسخة المثبتة.</li>
-<li><strong>البلاغات:</strong> إذا استخدم المستخدم خيار الإبلاغ عن إجابة، فقد يحدد نوع البلاغ ويضيف ملاحظة اختيارية. في النسخة الحالية تُحفظ هذه البلاغات محلياً على الجهاز فقط، ولا تُرسل إلى خادم المطوّر. وتتضمن البيانات المحفوظة محلياً نوع البلاغ والملاحظة ووقت إنشائه.</li>
+<li><strong>البلاغات:</strong> إذا استخدم المستخدم خيار الإبلاغ عن إجابة، فقد يحدد نوع البلاغ ويضيف ملاحظة اختيارية. في النسخة الحالية يُرسل سبب البلاغ والملاحظة الاختيارية بعد تنقيتهما إلى خادم Cloudflare ليتمكن المطوّر من مراجعتهما. لا يُرسل نص السؤال أو الإجابة أو اسم الطالب أو معرّف جهازه ضمن البلاغ. تُحفظ نسخة محلية بعد نجاح الإرسال، وتُحذف البلاغات المخزنة على الخادم تلقائياً بعد 90 يوماً.</li>
 <li><strong>البيانات التقنية لدى مزودي الخدمة:</strong> عند الاتصال بالإنترنت، قد تتلقى خدمات الاستضافة أو الشبكة بيانات تقنية مثل عنوان IP ووقت الطلب ومعلومات الاتصال والسجلات الأمنية، وفق إعدادات وسياسات تلك الخدمات. لا يتحكم التطبيق بالكامل في جمع هذه البيانات أو مدد الاحتفاظ بها لدى المزودين.</li>
 </ul>
 <p>أوراق الأسئلة المضمّنة داخل التطبيق لا تتطلب، لمجرد عرضها، إرسال سؤال المستخدم إلى المساعد. أما أي وظيفة مستقبلية جديدة فقد تخضع لتحديث هذه السياسة.</p>
@@ -123,7 +123,7 @@ footer{border-top:1px solid var(--line);margin-top:34px;padding-top:16px;font-si
 <ul>
 <li><strong>Questions and conversation context:</strong> When you submit a question to the AI assistant, the question text is processed. A portion of prior conversation context may also be sent when needed to understand and answer a follow-up.</li>
 <li><strong>On-device information:</strong> Depending on the installed app version and features used, preferences, questions/papers selected for saving, and answer reports may be stored in the app’s local storage on your device.</li>
-<li><strong>Answer reports:</strong> If you report an answer, you may select a report category and add an optional note. In the current version, reports are stored locally on your device only and are not sent to the developer’s server. Locally stored report details include the category, optional note, and creation time.</li>
+<li><strong>Answer reports:</strong> If you report an answer, you may select a report category and add an optional note. In the current version, the report category and optional sanitized note are sent to a Cloudflare server so the developer can review them. The report does not include the question text, AI answer, student name, or device identifier. A local copy is saved after successful submission, and server-stored reports are automatically deleted after 90 days.</li>
 <li><strong>Provider technical data:</strong> When the app connects to the internet, hosting or network providers may receive technical information such as IP address, request time, connection information, and security logs, subject to their services, settings, and policies. The app does not fully control provider-side collection or retention.</li>
 </ul>
 <p>Viewing exam papers bundled with the app does not, by itself, require sending your question to the AI assistant. New features may require this policy to be updated.</p>
