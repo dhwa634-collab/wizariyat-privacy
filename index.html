@@ -41,18 +41,18 @@ footer{border-top:1px solid var(--line);margin-top:34px;padding-top:16px;font-si
 
 <h2>3. المعلومات التي تتم معالجتها</h2>
 <ul>
-<li><strong>الأسئلة والمحادثة:</strong> عند إرسال سؤال إلى المساعد الذكي، تتم معالجة نص السؤال، وقد يُرسل جزء من سياق المحادثة السابق اللازم لفهم السؤال والرد عليه.</li>
-<li><strong>البيانات المحلية:</strong> قد تُحفظ تفضيلات أو أوراق يختار المستخدم حفظها، وبلاغات الإجابات، في مساحة تخزين التطبيق على الجهاز وفق ميزات النسخة المثبتة.</li>
-<li><strong>البلاغات:</strong> إذا استخدم المستخدم خيار الإبلاغ عن إجابة، فقد يحدد نوع البلاغ ويضيف ملاحظة اختيارية. في النسخة الحالية يُرسل سبب البلاغ ونص إجابة الذكاء الاصطناعي المبلّغ عنها والملاحظة الاختيارية بعد تنقيتها إلى خادم Cloudflare ليتمكن المطوّر من مراجعتها. لا يُرسل نص سؤال الطالب أو اسمه أو معرّف جهازه ضمن البلاغ. تُحفظ نسخة محلية بعد نجاح الإرسال، وتُحذف البلاغات المخزنة على الخادم تلقائياً بعد 90 يوماً.</li>
+<li><strong>الأسئلة والمحادثة:</strong> عند إرسال سؤال إلى المساعد، يُرسل نص السؤال الحالي، وقد يُرسل معه ما يصل إلى 10 رسائل سابقة من المحادثة (من رسائل الطالب وردود المساعد) لتوفير سياق المتابعة. لا تُحفظ المحادثة كسجل دائم في حساب؛ وتبقى الرسائل في ذاكرة جلسة التطبيق أثناء الاستخدام.</li>
+<li><strong>البيانات المحلية على الجهاز:</strong> تُحفظ أوراق الامتحانات التي يختار المستخدم إضافتها إلى المحفوظات، وكذلك فئة البلاغ وملاحظته، في مساحة التخزين المحلية للتطبيق. لا تتضمن المحفوظات المحلية نص المحادثة الكامل.</li>
+<li><strong>البلاغات:</strong> عند إرسال بلاغ، يرسل التطبيق إلى خادم Cloudflare فئة البلاغ (إجابة غير دقيقة، محتوى غير مناسب، أو مشكلة تقنية)، ونص الإجابة المبلّغ عنها، والملاحظة الاختيارية. لا يرسل التطبيق نص سؤال الطالب أو سجل محادثته ضمن طلب البلاغ. يحاول التطبيق والخادم إزالة أنماط واضحة من البريد الإلكتروني وبعض أرقام الهواتف قبل الحفظ، لكن ذلك غير مضمون. تُحفظ البلاغات على الخادم في مساحة Cloudflare KV لمدة تصل إلى 90 يوماً ثم تنتهي صلاحيتها تلقائياً. كما يحفظ التطبيق محلياً فئة البلاغ وملاحظته فقط، بحد أقصى 100 بلاغ محلي.</li>
 <li><strong>البيانات التقنية لدى مزودي الخدمة:</strong> عند الاتصال بالإنترنت، قد تتلقى خدمات الاستضافة أو الشبكة بيانات تقنية مثل عنوان IP ووقت الطلب ومعلومات الاتصال والسجلات الأمنية، وفق إعدادات وسياسات تلك الخدمات. لا يتحكم التطبيق بالكامل في جمع هذه البيانات أو مدد الاحتفاظ بها لدى المزودين.</li>
 </ul>
 <p>أوراق الأسئلة المضمّنة داخل التطبيق لا تتطلب، لمجرد عرضها، إرسال سؤال المستخدم إلى المساعد. أما أي وظيفة مستقبلية جديدة فقد تخضع لتحديث هذه السياسة.</p>
 
 <h2>4. كيفية انتقال بيانات المساعد الذكي</h2>
-<p>عند استخدام المساعد، يرسل التطبيق نص السؤال والسياق الضروري إلى خادم وسيط (Cloudflare Worker) مخصص لتشغيل الطلب، ثم يمرر الخادم محتوى الطلب إلى خدمة Google Gemini لتوليد الإجابة، ويعيد الرد إلى التطبيق. لذلك لا يُعالج طلب المساعد داخل الجهاز وحده.</p>
+<p>عند استخدام المساعد، يرسل التطبيق نص السؤال الحالي وما يصل إلى 10 رسائل سابقة من المحادثة إلى خادم وسيط (Cloudflare Worker). يحاول الخادم إزالة عناوين البريد الإلكتروني وبعض صيغ أرقام الهواتف العراقية المعروفة، ثم يمرر نص السؤال والسياق إلى Google Gemini لتوليد الإجابة ويعيد الرد إلى التطبيق. لذلك لا يُعالج طلب المساعد داخل الجهاز وحده. لا تُخزّن خدمة البلاغات في Cloudflare KV نصوص محادثات المساعد؛ وتُستخدم KV لحفظ البلاغات والعداد اليومي للحد من إساءة الاستخدام.</p>
 <ul>
 <li>لا يُفترض أن يرسل التطبيق إلى Gemini اسم المستخدم أو رقم حساب أو موقع GPS أو معرّف جهاز كجزء من نص السؤال.</li>
-<li>قد تعالج Cloudflare وGoogle بيانات الاتصال والطلب وفق الخدمات المستخدمة وإعداداتها وسياساتها.</li>
+<li>تعالج Cloudflare طلبات المساعد والبلاغات بوصفها مزود البنية التحتية للخادم. أما Google Gemini فيتلقى محتوى طلبات المساعد والسياق المرسل لتوليد الإجابة، ولا يتلقى طلب البلاغ عبر مسار البلاغ الحالي.</li>
 <li>قد يتغير تدفق البيانات إذا تغيرت البنية التقنية أو أضيفت ميزات؛ وستُحدّث هذه السياسة عند حدوث تغيير جوهري.</li>
 </ul>
 
@@ -60,27 +60,27 @@ footer{border-top:1px solid var(--line);margin-top:34px;padding-top:16px;font-si
 <p>تستخدم النسخة الحالية فحوصاً آلية محدودة للتعرف على بعض الأنماط الواضحة، مثل عناوين البريد الإلكتروني وبعض صيغ أرقام الهواتف العراقية، ومحاولة إزالتها قبل تمرير النص إلى Gemini. هذه الفحوص نمطية وليست نظاماً مضموناً للتعرف على الهوية؛ فقد تفشل في اكتشاف الأسماء والعناوين والأرقام المكتوبة بصيغ غير متوقعة أو أي معلومات حساسة أخرى. لا تعتمد على هذه الميزة لحماية بياناتك، ولا تدخل معلومات شخصية أو حساسة إطلاقاً.</p>
 
 <h2>6. مزودو الخدمات والروابط الخارجية</h2>
-<p>يعتمد المساعد في النسخة الحالية على:</p>
+<p>تعتمد النسخة الحالية على مزودي الخدمات التاليين، ولكل منهما دور مختلف:</p>
 <ul>
-<li><strong>Cloudflare:</strong> لاستضافة وتشغيل الخادم الوسيط ومعالجة حركة الطلبات. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">سياسة خصوصية Cloudflare</a>.</li>
-<li><strong>Google Gemini / Google:</strong> لمعالجة نص الطلب وتوليد إجابة الذكاء الاصطناعي. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">سياسة خصوصية Google</a> و<a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener noreferrer">شروط Gemini API</a>.</li>
+<li><strong>Cloudflare:</strong> لاستضافة وتشغيل الخادم الوسيط، ومعالجة طلبات المحادثة والبلاغات. تُحفظ البلاغات في Cloudflare KV لمدة تصل إلى 90 يوماً، كما يُحفظ عداد يومي للبلاغات لمدة يومين تقريباً للحد من الإرسال المفرط. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">سياسة خصوصية Cloudflare</a>.</li>
+<li><strong>Google Gemini / Google:</strong> لمعالجة نص السؤال وسياق المحادثة المرسل من المساعد وتوليد الإجابة. لا يُرسل مسار البلاغات الحالي بيانات البلاغات إلى Gemini. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">سياسة خصوصية Google</a> و<a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener noreferrer">شروط Gemini API</a>.</li>
 </ul>
 <p>تخضع معالجة البيانات لدى هذه الجهات لشروطها وسياساتها وإعدادات الخدمة السارية، وقد تختلف مدد الاحتفاظ والاستخدام بحسب نوع الخدمة والحساب والإعدادات والقانون. يرجى مراجعة وثائقهم مباشرة. قد تحتوي النسخ المستقبلية على روابط أو خدمات أخرى، وسيتم توضيحها عند إضافتها.</p>
 
 <h2>7. أغراض الاستخدام</h2>
-<p>تُستخدم المعلومات اللازمة لتقديم إجابات المساعد، وفهم سياق السؤال، وتشغيل الميزات التي يطلبها المستخدم، وحفظ اختياراته محلياً، وتشخيص الأعطال وحماية الخدمة من إساءة الاستخدام. لا يبيع مطوّر التطبيق نصوص أسئلة المستخدمين أو البلاغات المحلية.</p>
+<p>تُستخدم المعلومات اللازمة لتقديم إجابات المساعد وفهم سياق المتابعة، ومراجعة البلاغات التي يرسلها المستخدم، وتشغيل الميزات المطلوبة وحفظ الاختيارات محلياً، وتشخيص الأعطال والحد من إساءة الاستخدام. لا يبيع مطوّر التطبيق هذه البيانات.</p>
 
 <h2>8. التخزين والاحتفاظ والحذف</h2>
 <ul>
 <li>سجل المحادثة في النسخة الحالية ليس سجلاً دائماً محفوظاً داخل حساب مستخدم؛ وقد يبقى سياق المحادثة في ذاكرة التطبيق أثناء جلسة الاستخدام لتسهيل المتابعة.</li>
-<li>تُحفظ البلاغات والاختيارات المحلية في مساحة التطبيق على الجهاز إلى أن تُحذف أو تُزال بيانات التطبيق.</li>
+<li>تُحفظ أوراق الامتحانات المحفوظة وفئة البلاغ وملاحظته في مساحة التطبيق على الجهاز إلى أن يحذفها المستخدم أو يمسح بيانات التطبيق. يحتفظ التطبيق محلياً بآخر 100 بلاغ كحد أقصى.</li>
 <li>يمكن حذف البيانات المحلية عبر أدوات الحذف المتاحة داخل التطبيق، إن وجدت، أو من إعدادات الجهاز بمسح بيانات التطبيق أو إلغاء تثبيته. قد يؤدي ذلك إلى حذف البيانات المحلية المحفوظة.</li>
-<li>لا يستطيع التطبيق حذف سجلات أو بيانات قد تكون احتفظت بها Cloudflare أو Google؛ وتخضع طلبات الحذف لدى تلك الجهات لإجراءاتها وسياساتها.</li>
+<li>تنتهي صلاحية البلاغات المحفوظة في Cloudflare KV تلقائياً بعد 90 يوماً. لا توجد حالياً أداة داخل التطبيق لحذف بلاغ منفرد من الخادم قبل انتهاء هذه المدة. أما سجلات الشبكة أو البيانات التي قد تحتفظ بها Cloudflare أو Google خارج مخزن البلاغات فتخضع لإعدادات وسياسات كل مزود.</li>
 <li>قد تحتفظ مزودات الخدمة بسجلات تشغيل أو أمن أو طلبات للمدة التي تحددها سياساتها وإعداداتها. لا نحدد في هذه السياسة مدة ثابتة لاحتفاظهم بها لأن ذلك ليس تحت سيطرة التطبيق.</li>
 </ul>
 
 <h2>9. مشاركة البيانات والإفصاح عنها</h2>
-<p>لا يبيع التطبيق البيانات الشخصية. يشارك التطبيق محتوى السؤال والسياق الضروري مع Cloudflare وGoogle Gemini بالقدر اللازم لتقديم المساعد. وقد تتم معالجة البيانات أو الإفصاح عنها من قبل مزودي الخدمة وفق شروطهم، أو عندما يكون ذلك مطلوباً بموجب القانون، أو لحماية أمن الخدمة وحقوق المستخدمين. لا تُرسل البلاغات المحلية في النسخة الحالية إلى المطوّر.</p>
+<p>لا يبيع التطبيق البيانات الشخصية. يُرسل نص السؤال وسياق المحادثة إلى Cloudflare ثم Google Gemini لتقديم المساعد. وتُرسل البلاغات التي يختار المستخدم تقديمها إلى Cloudflare ليتمكن المطوّر من مراجعتها، ولا يرسل مسار البلاغات الحالي هذه البلاغات إلى Google Gemini. وقد يعالج مزودو الخدمة بيانات تقنية أو يفصحون عنها وفق شروطهم، أو عند وجود التزام قانوني أو ضرورة لحماية أمن الخدمة وحقوق المستخدمين.</p>
 
 <h2>10. الأطفال والطلاب والقاصرون</h2>
 <p>التطبيق موجّه لطلاب المرحلة المتوسطة، وقد يستخدمه أشخاص دون سن 18 عاماً. لا يطلب التطبيق منهم تقديم بيانات تعريفية لاستخدام المساعد. ينبغي للطلاب وأولياء أمورهم عدم إدخال أسماء الطلاب أو أرقام الهواتف أو العناوين أو أسماء المدارس أو الصور أو أي بيانات تكشف هوية شخص أو موقعه. إذا اعتقد ولي أمر أن طفلاً أرسل بيانات شخصية، فعليه التواصل عبر قناة الدعم المنشورة في صفحة التطبيق، مع العلم أن حذفها من أنظمة مزودي الخدمة يخضع لإجراءاتهم.</p>
@@ -121,18 +121,18 @@ footer{border-top:1px solid var(--line);margin-top:34px;padding-top:16px;font-si
 
 <h2>3. Information processed</h2>
 <ul>
-<li><strong>Questions and conversation context:</strong> When you submit a question to the AI assistant, the question text is processed. A portion of prior conversation context may also be sent when needed to understand and answer a follow-up.</li>
-<li><strong>On-device information:</strong> Depending on the installed app version and features used, preferences, questions/papers selected for saving, and answer reports may be stored in the app’s local storage on your device.</li>
-<li><strong>Answer reports:</strong> If you report an answer, you may select a report category and add an optional note. In the current version, the report category and optional sanitized note are sent to a Cloudflare server so the developer can review them. The report includes the reported AI answer and does not include the student's question, name, or device identifier. A local copy is saved after successful submission, and server-stored reports are automatically deleted after 90 days.</li>
+<li><strong>Questions and conversation:</strong> When you submit a question, the current question and up to 10 previous messages (student messages and assistant replies) may be sent to provide follow-up context. The app does not maintain a permanent account-based chat history; messages remain in the app session memory while in use.</li>
+<li><strong>On-device information:</strong> Exam papers selected for saving and the category and note of submitted reports are stored in the app’s local storage. The local report history does not contain the full chat conversation.</li>
+<li><strong>Answer reports:</strong> When you submit a report, the app sends the selected category (inaccurate answer, inappropriate content, or technical issue), the reported AI answer, and your optional note to a Cloudflare server for developer review. The report request does not include the student's question or chat history. The app and server attempt to remove obvious email addresses and some Iraqi phone-number patterns, but this filtering is not guaranteed. Reports are stored in Cloudflare KV for up to 90 days and then expire automatically. The app also stores only the report category and note locally, up to 100 local reports.</li>
 <li><strong>Provider technical data:</strong> When the app connects to the internet, hosting or network providers may receive technical information such as IP address, request time, connection information, and security logs, subject to their services, settings, and policies. The app does not fully control provider-side collection or retention.</li>
 </ul>
 <p>Viewing exam papers bundled with the app does not, by itself, require sending your question to the AI assistant. New features may require this policy to be updated.</p>
 
 <h2>4. How AI assistant data flows</h2>
-<p>When you use the assistant, the app sends your question and the context needed to handle it to an intermediary server (a Cloudflare Worker). That server forwards the request content to Google Gemini to generate an answer, then returns the response to the app. Therefore, an assistant request is not processed solely on your device.</p>
+<p>When you use the assistant, the app sends the current question and up to 10 previous conversation messages to an intermediary server (a Cloudflare Worker). The server attempts to remove obvious email addresses and certain recognized Iraqi phone-number formats, then forwards the question and context to Google Gemini to generate an answer and returns the response to the app. Therefore, an assistant request is not processed solely on your device. The Cloudflare KV report store is not used to store assistant chat messages; it stores submitted reports and a daily counter used to limit abuse.</p>
 <ul>
 <li>The app is not intended to include your name, account number, GPS location, or device identifier as part of the question text sent to Gemini.</li>
-<li>Cloudflare and Google may process request and connection data under their own applicable service terms, privacy policies, and settings.</li>
+<li>Cloudflare processes assistant requests and submitted reports as the server infrastructure provider. Google Gemini receives assistant question text and conversation context for response generation; the current report endpoint does not send report content to Gemini.</li>
 <li>The data flow may change if the app’s technical architecture or features change. Material changes will be reflected in an updated policy.</li>
 </ul>
 
@@ -140,27 +140,27 @@ footer{border-top:1px solid var(--line);margin-top:34px;padding-top:16px;font-si
 <p>The current version uses limited automated pattern checks to identify certain obvious formats, such as email addresses and some Iraqi phone-number formats, and attempts to remove them before forwarding text to Gemini. This is not a reliable identity-detection system. It may fail to detect names, addresses, unusual number formats, or other sensitive information. Do not rely on this filtering to protect your data; never enter personal or sensitive information.</p>
 
 <h2>6. Service providers and external links</h2>
-<p>The current AI assistant relies on the following providers:</p>
+<p>The current version uses the following service providers, each for a separate purpose:</p>
 <ul>
-<li><strong>Cloudflare:</strong> Hosting and operation of the intermediary server and request traffic processing. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">Cloudflare Privacy Policy</a>.</li>
-<li><strong>Google Gemini / Google:</strong> Processing request text and generating AI responses. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a> and <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener noreferrer">Gemini API Terms</a>.</li>
+<li><strong>Cloudflare:</strong> Hosting and operation of the intermediary server and processing of chat and report requests. Reports are stored in Cloudflare KV for up to 90 days; a daily report counter is retained for approximately two days to limit excessive submissions. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">Cloudflare Privacy Policy</a>.</li>
+<li><strong>Google Gemini / Google:</strong> Processing assistant question text and conversation context to generate responses. The current report endpoint does not send report content to Gemini. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a> and <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener noreferrer">Gemini API Terms</a>.</li>
 </ul>
 <p>Provider-side processing is governed by the providers’ applicable terms, policies, and service settings. Retention and use may vary by service, account, configuration, and applicable law. Please review the providers’ current documentation. Future versions may add other services, which will be described when introduced.</p>
 
 <h2>7. Purposes of processing</h2>
-<p>Information is processed as needed to provide AI answers, understand question context, operate features requested by the user, store user selections locally, diagnose technical problems, and protect the service against misuse. The app developer does not sell users’ question text or locally stored reports.</p>
+<p>Information is processed as needed to provide AI answers and follow-up context, review reports voluntarily submitted by users, operate requested features, store selections locally, diagnose technical problems, and limit misuse. The app developer does not sell this information.</p>
 
 <h2>8. Storage, retention, and deletion</h2>
 <ul>
 <li>The current version does not maintain a permanent, account-based chat history. Conversation context may remain in the app’s memory during a use session to support follow-up questions.</li>
-<li>Reports and other local selections remain in the app’s on-device storage until deleted or until app data is cleared.</li>
+<li>Saved exam papers and the category and note of reports remain in the app’s on-device storage until deleted or until app data is cleared. The app stores no more than 100 local reports.</li>
 <li>You may delete local information using deletion controls available in the app, if provided, or by clearing the app’s data in your device settings or uninstalling the app. This may delete locally stored information.</li>
-<li>The app cannot delete records or data that Cloudflare or Google may retain. Requests concerning provider-held data are subject to those providers’ procedures and policies.</li>
+<li>Reports stored in Cloudflare KV expire automatically after 90 days. The app currently has no in-app tool to delete an individual server-side report before that expiry. Network logs or other information Cloudflare or Google may retain outside the report store are subject to each provider’s settings and policies.</li>
 <li>Service providers may retain operational, security, or request logs for periods determined by their own policies and settings. This policy does not specify a fixed provider retention period because it is not controlled by the app.</li>
 </ul>
 
 <h2>9. Sharing and disclosure</h2>
-<p>The app does not sell personal information. It shares question text and necessary context with Cloudflare and Google Gemini to provide the AI assistant. Providers may process or disclose information under their terms, when required by law, or to protect service security and users’ rights. In the current version, locally stored reports are not sent to the developer.</p>
+<p>The app does not sell personal information. Question text and conversation context are sent to Cloudflare and then Google Gemini to provide the assistant. Reports that users choose to submit are sent to Cloudflare for developer review; the current report endpoint does not send those reports to Google Gemini. Service providers may also process technical data or disclose information under their terms, when legally required, or when necessary to protect service security and users’ rights.</p>
 
 <h2>10. Students, children, and minors</h2>
 <p>The app is intended for intermediate-school students and may be used by people under 18. The app does not ask students to provide identifying information to use the assistant. Students and parents/guardians should ensure that users do not enter student names, phone numbers, addresses, school names, photos, or other information that identifies a person or their location. If a parent or guardian believes a child has submitted personal information, they should contact the developer through the support channel published on the app listing. Removal from provider systems remains subject to the providers’ procedures.</p>
